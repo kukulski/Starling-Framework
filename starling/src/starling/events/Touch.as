@@ -44,7 +44,9 @@ package starling.events
         private var mPhase:String;
         private var mTarget:DisplayObject;
         private var mTimestamp:Number;
-        
+        private var mIntent:String;
+		private var mPressure:Number;
+		
         /** Creates a new Touch object. */
         public function Touch(id:int, globalX:Number, globalY:Number, phase:String, target:DisplayObject)
         {
@@ -113,6 +115,10 @@ package starling.events
         /** The moment the touch occurred (in seconds since application start). */
         public function get timestamp():Number { return mTimestamp; }
         
+		
+		public function get pressure():Number { return mPressure;}
+		public function get intent():String { return mIntent;}
+		
         // internal methods
         
         /** @private */
@@ -124,16 +130,27 @@ package starling.events
             mGlobalY = globalY;
         }
         
-        /** @private */
-        internal function setPhase(value:String):void { mPhase = value; }
-        
+		/** @private */
+		internal function setPhase(value:String):void { mPhase = value; }
+		
+		/** @private */
+		internal function setIntent(value:String):void { mIntent = value; }
+		
         /** @private */
         internal function setTapCount(value:int):void { mTapCount = value; }
         
         /** @private */
         internal function setTarget(value:DisplayObject):void { mTarget = value; }
         
-        /** @private */
-        internal function setTimestamp(value:Number):void { mTimestamp = value; }
+		/** @private */
+		internal function setTimestamp(value:Number):void { mTimestamp = value; }
+		
+		/** @private */
+		internal function setPressure(value:Number):void { mPressure = value; }
+		
+		
+		
+		
+		
     }
 }

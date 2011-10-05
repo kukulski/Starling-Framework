@@ -118,8 +118,10 @@ package starling.events
                 for each (touchID in processedTouchIDs)
                 {
                     touch = getCurrentTouch(touchID);
-                    touch.target.dispatchEvent(new TouchEvent(TouchEvent.TOUCH, mCurrentTouches,
-                                                              mShiftDown, mCtrlDown));
+                   
+					if(touch && touch.target)
+						touch.target.dispatchEvent(new TouchEvent(TouchEvent.TOUCH, mCurrentTouches,
+    	                                                          mShiftDown, mCtrlDown));
                 }
                 
                 // remove ended touches
@@ -133,7 +135,7 @@ package starling.events
             }
         }
         
-        public function enqueue(touchID:int, phase:String, globalX:Number, globalY:Number):void
+        public function enqueue(touchID:int, phase:String, globalX:Number, globalY:Number, pressure:Number, intent:String):void
         {
             mQueue.unshift(arguments);
             
@@ -141,14 +143,15 @@ package starling.events
             if (mCtrlDown && simulateMultitouch && touchID == 0) 
             {
                 mTouchMarker.moveMarker(globalX, globalY, mShiftDown);
-                
+
+				//TODO: update to handle tablet proximity
                 // only mouse can hover
                 if (phase != TouchPhase.HOVER)
-                    mQueue.unshift([1, phase, mTouchMarker.mockX, mTouchMarker.mockY]);
+                    mQueue.unshift([1, phase, mTouchMarker.mockX, mTouchMarker.mockY,pressure, intent]);
             }
         }
         
-        private function processTouch(touchID:int, phase:String, globalX:Number, globalY:Number):void
+        private function processTouch(touchID:int, phase:String, globalX:Number, globalY:Number, pressure:Number, intent:String):void
         {
             var position:Point = new Point(globalX, globalY);
             var touch:Touch = getCurrentTouch(touchID);
@@ -162,6 +165,8 @@ package starling.events
             touch.setPosition(globalX, globalY);
             touch.setPhase(phase);
             touch.setTimestamp(mElapsedTime);
+			touch.setIntent(intent);
+			touch.setPressure(pressure);
             
             if (phase == TouchPhase.HOVER || phase == TouchPhase.BEGAN)
                 touch.setTarget(mStage.hitTest(position, true));

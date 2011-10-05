@@ -56,6 +56,7 @@ package scenes
                 var location:Point = touch.getLocation(this);
                 mBrush.x = location.x;
                 mBrush.y = location.y;
+				mBrush.scaleX = mBrush.scaleY = touch.pressure;
 				
                 mRenderTexture.draw(mBrush);
             }

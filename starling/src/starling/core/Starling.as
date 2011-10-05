@@ -143,7 +143,7 @@ package starling.core
          */
         public function Starling(rootClass:Class, stage:flash.display.Stage, 
                                  viewPort:Rectangle=null, stage3D:Stage3D=null,
-                                 renderMode:String="auto") 
+                                 renderMode:String="auto",useTouchAnyway:Boolean = false) 
         {
             if (stage == null) throw new ArgumentError("Stage must not be null");
             if (rootClass == null) throw new ArgumentError("Root class must not be null");
@@ -167,14 +167,22 @@ package starling.core
             if (sCurrent == null)
                 makeCurrent();
             
-            // register touch/mouse event handlers            
-            var touchEventTypes:Array = Multitouch.supportsTouchEvents ?
-                [ TouchEvent.TOUCH_BEGIN, TouchEvent.TOUCH_MOVE, TouchEvent.TOUCH_END ] :
-                [ MouseEvent.MOUSE_DOWN, MouseEvent.MOUSE_MOVE, MouseEvent.MOUSE_UP ];            
+			// register touch/mouse event handlers            
+	//		var touchEventTypes:Array = 	[ TouchEvent.TOUCH_BEGIN, TouchEvent.TOUCH_MOVE, TouchEvent.TOUCH_END ];   
+			
+//			
+			// register touch/mouse event handlers            
+			var touchEventTypes:Array = (useTouchAnyway || Multitouch.supportsTouchEvents) ?
+				[ TouchEvent.TOUCH_BEGIN, TouchEvent.TOUCH_MOVE, TouchEvent.TOUCH_END ] :
+				[ MouseEvent.MOUSE_DOWN, MouseEvent.MOUSE_MOVE, MouseEvent.MOUSE_UP ];    
             
+		
             for each (var touchEventType:String in touchEventTypes)
                 stage.addEventListener(touchEventType, onTouch, false, 0, true);
             
+				
+				
+				
             // register other event handlers
             stage.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
             stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey, false, 0, true);
@@ -341,18 +349,24 @@ package starling.core
             mStage.dispatchEvent(new ResizeEvent(Event.RESIZE, stage.stageWidth, stage.stageHeight));
         }
 
+
+		
         private function onTouch(event:Event):void
         {
             var position:Point;
             var phase:String;
             var touchID:int;
-            
+            var pressure:Number;
+			var intent:String;
+			
             if (event is MouseEvent)
             {
                 var mouseEvent:MouseEvent = event as MouseEvent;
                 position = convertPosition(new Point(mouseEvent.stageX, mouseEvent.stageY));
                 phase = getPhaseFromMouseEvent(mouseEvent);
                 touchID = 0;
+				pressure = 1;
+				intent = "mouse";
             }
             else
             {
@@ -360,9 +374,11 @@ package starling.core
                 position = convertPosition(new Point(touchEvent.stageX, touchEvent.stageY));
                 phase = getPhaseFromTouchEvent(touchEvent);
                 touchID = touchEvent.touchPointID;
+				pressure = touchEvent.pressure;
+				intent = touchEvent.touchIntent;
             }
             
-            mTouchProcessor.enqueue(touchID, phase, position.x, position.y);
+            mTouchProcessor.enqueue(touchID, phase, position.x, position.y, pressure, intent);
             
             function convertPosition(globalPos:Point):Point
             {
@@ -391,7 +407,9 @@ package starling.core
                     case TouchEvent.TOUCH_BEGIN: return TouchPhase.BEGAN; break;
                     case TouchEvent.TOUCH_MOVE:  return TouchPhase.MOVED; break;
                     case TouchEvent.TOUCH_END:   return TouchPhase.ENDED; break;
-                    default: return null;
+			
+					//TODO: add tablet hover info
+					default: return null;
                 }
             }
         }
@@ -483,18 +501,6 @@ package starling.core
             }
             
             return mNativeOverlay;
-        }
-        
-        /** The Starling stage object, which is the root of the display tree that is rendered. */
-        public function get stage():Stage
-        {
-            return mStage;
-        }
-        
-        /** The Flash (2D) stage Starling renders beneath. */
-        public function get nativeStage():flash.display.Stage
-        {
-            return mNativeStage;
         }
         
         // static properties
