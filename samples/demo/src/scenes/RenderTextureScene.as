@@ -15,12 +15,7 @@ package scenes
     {
         private var mRenderTexture:RenderTexture;
         private var mBrush:Image;
-		private var mCallbackTouches:Vector.<Touch>;
-
-		
-		// ugly bandaid to allow 
-        public static var sWidth:int = 320;
-		public static var sHeight:int = 435;
+        
         public function RenderTextureScene()
         {
             var description:String = "Touch the screen to draw eggs!";
@@ -36,25 +31,18 @@ package scenes
             mBrush.pivotY = mBrush.height / 2;
             mBrush.scaleX = mBrush.scaleY = 0.5;
             
-            mRenderTexture = new RenderTexture(sWidth, sHeight); 
+            mRenderTexture = new RenderTexture(320, 435); 
             
             var canvas:Image = new Image(mRenderTexture);
             canvas.addEventListener(TouchEvent.TOUCH, onTouch);
             addChild(canvas);
         }
         
-			
         private function onTouch(event:TouchEvent):void
         {
-        
-			mCallbackTouches = event.getTouches(this);
-			mRenderTexture.drawBundled(drawBundledCallback);
-		}
-		
-		
-		private function drawBundledCallback():void {
-			
-            for each (var touch:Touch in mCallbackTouches)
+            var touches:Vector.<Touch> = event.getTouches(this);
+            
+            for each (var touch:Touch in touches)
             {
                 if (touch.phase == TouchPhase.HOVER || touch.phase == TouchPhase.ENDED)
                     continue;
@@ -62,13 +50,11 @@ package scenes
                 var location:Point = touch.getLocation(this);
                 mBrush.x = location.x;
                 mBrush.y = location.y;
-          		// later: depends on pressure being added to Touch object
-				//      mBrush.scaleX = mBrush.scaleY = touch.pressure;
+                
                 mRenderTexture.draw(mBrush);
             }
-			mCallbackTouches = null;			
         }
-		
+        
         public override function dispose():void
         {
             mRenderTexture.dispose();
