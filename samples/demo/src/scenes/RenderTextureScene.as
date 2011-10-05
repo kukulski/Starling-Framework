@@ -15,7 +15,8 @@ package scenes
     {
         private var mRenderTexture:RenderTexture;
         private var mBrush:Image;
-        
+		private var mCallbackTouches:Vector.<Touch>;
+
         public function RenderTextureScene()
         {
             var description:String = "Touch the screen to draw eggs!";
@@ -37,12 +38,17 @@ package scenes
             canvas.addEventListener(TouchEvent.TOUCH, onTouch);
             addChild(canvas);
         }
-        
+        	
         private function onTouch(event:TouchEvent):void
         {
-            var touches:Vector.<Touch> = event.getTouches(this);
-            
-            for each (var touch:Touch in touches)
+ 			mCallbackTouches = event.getTouches(this);
+			mRenderTexture.drawBundled(drawBundledCallback);
+		}
+		
+		
+		private function drawBundledCallback():void {
+			
+            for each (var touch:Touch in mCallbackTouches)
             {
                 if (touch.phase == TouchPhase.HOVER || touch.phase == TouchPhase.ENDED)
                     continue;
@@ -50,11 +56,12 @@ package scenes
                 var location:Point = touch.getLocation(this);
                 mBrush.x = location.x;
                 mBrush.y = location.y;
-                
+				
                 mRenderTexture.draw(mBrush);
             }
+			mCallbackTouches = null;			
         }
-        
+		
         public override function dispose():void
         {
             mRenderTexture.dispose();
