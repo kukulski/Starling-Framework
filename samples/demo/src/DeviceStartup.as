@@ -24,7 +24,7 @@ package
 	//		RenderTextureScene.sWidth = 2048;// _devMgr.bounds.width;
             Starling.multitouchEnabled = true;
             
-            mStarling = new Starling(Game, stage,null,null,"auto",true);
+            mStarling = new Starling(Game, stage);
             mStarling.simulateMultitouch = false;
             mStarling.enableErrorChecking = false;
             mStarling.start();

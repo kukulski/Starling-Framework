@@ -128,7 +128,8 @@ package starling.core
         private var mPrograms:Dictionary;
         
         private static var sCurrent:Starling;
-        
+		private static var sMultitouchForced:Boolean;
+		
         // construction
         
         /** Creates a new Starling instance. 
@@ -143,7 +144,7 @@ package starling.core
          */
         public function Starling(rootClass:Class, stage:flash.display.Stage, 
                                  viewPort:Rectangle=null, stage3D:Stage3D=null,
-                                 renderMode:String="auto",useTouchAnyway:Boolean = false) 
+                                 renderMode:String="auto") 
         {
             if (stage == null) throw new ArgumentError("Stage must not be null");
             if (rootClass == null) throw new ArgumentError("Root class must not be null");
@@ -172,7 +173,7 @@ package starling.core
 			
 //			
 			// register touch/mouse event handlers            
-			var touchEventTypes:Array = (useTouchAnyway || Multitouch.supportsTouchEvents) ?
+			var touchEventTypes:Array = (sMultitouchForced || Multitouch.supportsTouchEvents) ?
 				[ TouchEvent.TOUCH_BEGIN, TouchEvent.TOUCH_MOVE, TouchEvent.TOUCH_END ] :
 				[ MouseEvent.MOUSE_DOWN, MouseEvent.MOUSE_MOVE, MouseEvent.MOUSE_UP ];    
             
@@ -521,7 +522,8 @@ package starling.core
         }
         
         public static function set multitouchEnabled(value:Boolean):void
-        {            
+        {  
+			sMultitouchForced = value;
             Multitouch.inputMode = value ? MultitouchInputMode.TOUCH_POINT :
                                            MultitouchInputMode.NONE;
         }
