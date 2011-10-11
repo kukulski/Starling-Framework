@@ -282,6 +282,10 @@ package starling.display
             throw new AbstractMethodError("Method needs to be implemented in subclass");
         }
         
+		protected  function setBlendFactors(support:RenderSupport):void {
+			support.setDefaultBlendFactors(true);
+		}
+		
         /** @inheritDoc */
         public override function dispatchEvent(event:Event):void
         {
@@ -424,5 +428,7 @@ package starling.display
         /** The stage the display object is connected to, or null if it is not connected 
          *  to a stage. */
         public function get stage():Stage { return this.root as Stage; }
+		
+		
     }
 }

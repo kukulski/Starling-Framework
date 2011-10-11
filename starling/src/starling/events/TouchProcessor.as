@@ -167,6 +167,7 @@ package starling.events
             touch.setTimestamp(mElapsedTime);
 			touch.setIntent(intent);
 			touch.setPressure(pressure);
+			touch.resetPropogation();
             
             if (phase == TouchPhase.HOVER || phase == TouchPhase.BEGAN)
                 touch.setTarget(mStage.hitTest(position, true));

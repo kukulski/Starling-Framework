@@ -32,7 +32,7 @@ package scenes
             mBrush.pivotY = mBrush.height / 2;
             mBrush.scaleX = mBrush.scaleY = 0.5;
             
-            mRenderTexture = new RenderTexture(320, 435); 
+            mRenderTexture = new RenderTexture(1920, 1000); 
             
             var canvas:Image = new Image(mRenderTexture);
             canvas.addEventListener(TouchEvent.TOUCH, onTouch);

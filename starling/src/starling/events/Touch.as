@@ -46,6 +46,7 @@ package starling.events
         private var mTimestamp:Number;
         private var mIntent:String;
 		private var mPressure:Number;
+		private var mStoppedPropogating:String;
 		
         /** Creates a new Touch object. */
         public function Touch(id:int, globalX:Number, globalY:Number, phase:String, target:DisplayObject)
@@ -119,6 +120,13 @@ package starling.events
 		public function get pressure():Number { return mPressure;}
 		public function get intent():String { return mIntent;}
 		
+		public function get stopped():Boolean { return mStoppedPropogating != null;}
+		public function get stoppedImmediate():Boolean { return mStoppedPropogating == "immediate";}
+		
+		
+		public function stopPropogation():void { mStoppedPropogating ||= "stopped";}
+		public function stopImmediatePropogation():void { mStoppedPropogating = "immediate";}
+		public function resetPropogation():void { mStoppedPropogating = null;}
         // internal methods
         
         /** @private */

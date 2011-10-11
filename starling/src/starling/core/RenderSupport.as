@@ -122,6 +122,10 @@ package starling.core
             return mvpMatrix;
         }
         
+		public function get modelViewMatrix():Matrix3D {
+			return mModelViewMatrix.clone();
+		}
+		
         /** Prepends translation, scale and rotation of an object to a custom matrix. */
         public static function transformMatrixForObject(matrix:Matrix3D, object:DisplayObject):void
         {

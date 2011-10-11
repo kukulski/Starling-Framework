@@ -13,6 +13,7 @@ package starling.display
     import com.adobe.utils.AGALMiniAssembler;
     
     import flash.display.Bitmap;
+    import flash.display.BitmapData;
     import flash.display3D.Context3D;
     import flash.display3D.Context3DProgramType;
     import flash.display3D.Context3DVertexBufferFormat;
@@ -84,6 +85,11 @@ package starling.display
             return new Image(Texture.fromBitmap(bitmap));
         }
         
+		public static function fromBitmapData(bmd:BitmapData):Image 
+		{
+			return new Image(Texture.fromBitmapData(bmd));
+		}
+		
         /** Sets the texture coordinates of a vertex. Coordinates are in the range [0, 1]. */
         public function setTexCoords(vertexID:int, coords:Point):void
         {

@@ -75,6 +75,8 @@ package starling.events
             var touchesFound:Vector.<Touch> = new <Touch>[];
             for each (var touch:Touch in mTouches)
             {
+				if(touch.stopped) continue;
+				
                 var correctTarget:Boolean = (touch.target == target) ||
                     ((target is DisplayObjectContainer) && 
                      (target as DisplayObjectContainer).contains(touch.target));
@@ -111,5 +113,9 @@ package starling.events
         
         /** Indicates if the ctrl key was pressed when the event occurred. (Mac OS: Cmd or Ctrl) */
         public function get ctrlKey():Boolean { return mCtrlKey; }
+		
+
+	
+	
     }
 }

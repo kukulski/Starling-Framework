@@ -10,7 +10,7 @@ package
     
     import xd.touch.DeviceManagerClient;
     
-    [SWF(width="1500", height="1024", frameRate="60", backgroundColor="#222222")]
+    [SWF(width="1920", height="1080", frameRate="60", backgroundColor="#222222")]
     public class DeviceStartup extends DeviceManagerClient
     {
         private var mStarling:Starling;

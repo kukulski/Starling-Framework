@@ -163,6 +163,12 @@ package starling.display
             return mVertexData.clone(); 
         }
         
+		protected function get programName():String {
+			return PROGRAM_NAME;
+		}
+		
+
+		
         /** @inheritDoc */
         public override function render(support:RenderSupport, alpha:Number):void
         {
@@ -175,9 +181,9 @@ package starling.display
             if (mVertexBuffer == null) createVertexBuffer();
             if (mIndexBuffer  == null) createIndexBuffer();
             
-            support.setDefaultBlendFactors(true);
-            
-            context.setProgram(Starling.current.getProgram(PROGRAM_NAME));
+  			setBlendFactors(support);
+			
+            context.setProgram(Starling.current.getProgram(programName));
             context.setVertexBufferAt(0, mVertexBuffer, VertexData.POSITION_OFFSET, Context3DVertexBufferFormat.FLOAT_3); 
             context.setVertexBufferAt(1, mVertexBuffer, VertexData.COLOR_OFFSET,    Context3DVertexBufferFormat.FLOAT_4);
             context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, support.mvpMatrix, true);            
